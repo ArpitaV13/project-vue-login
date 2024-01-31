@@ -1,105 +1,73 @@
-import { createStore } from 'vue'
-import router from '../router'
-import { auth } from '../firebase'
-import { 
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut 
-} from 'firebase/auth'
+import { defineStore } from 'pinia';
 
-export default createStore({
-  state: {
+export const useUserStore = defineStore('user', {
+  state: () => ({
     user: null
-  },
-  mutations: {
-
-    SET_USER (state, user) {
-      state.user = user
-    },
-
-    CLEAR_USER (state) {
-      state.user = null
-    }
-
-  },
+  }),
   actions: {
-    async login ({ commit }, details) {
-      const { email, password } = details
-
+    async login(details) {
+      const { email, password } = details;
       try {
-        await signInWithEmailAndPassword(auth, email, password)
+        await signInWithEmailAndPassword(this.auth, email, password);
+        this.user = this.auth.currentUser;
+        this.router.push('/');
       } catch (error) {
-        switch(error.code) {
-          case 'auth/user-not-found':
-            alert("User not found")
-            break
-          case 'auth/wrong-password':
-            alert("Wrong password")
-            break
-          default:
-            alert("Something went wrong")
-        }
-
-        return
+        console.log("Could not sign in:", error.message);
       }
-
-      commit('SET_USER', auth.currentUser)
-
-      router.push('/')
     },
 
-    async register ({ commit}, details) {
-       const { email, password } = details
+    clearUser() {
+      this.user = null;
+    },
+
+    async register(details) {
+      const { email, password } = details;
 
       try {
-        await createUserWithEmailAndPassword(auth, email, password)
+        await createUserWithEmailAndPassword(this.auth, email, password);
       } catch (error) {
-        switch(error.code) {
+        switch (error.code) {
           case 'auth/email-already-in-use':
-            alert("Email already in use")
-            break
+            alert("Email already in use");
+            break;
           case 'auth/invalid-email':
-            alert("Invalid email")
-            break
+            alert("Invalid email");
+            break;
           case 'auth/operation-not-allowed':
-            alert("Operation not allowed")
-            break
+            alert("Operation not allowed");
+            break;
           case 'auth/weak-password':
-            alert("Weak password")
-            break
+            alert("Weak password");
+            break;
           default:
-            alert("Something went wrong")
+            alert("Something went wrong");
         }
-
-        return
       }
-
-      commit('SET_USER', auth.currentUser)
-
-      router.push('/')
     },
 
-    async logout ({ commit }) {
-      await signOut(auth)
-
-      commit('CLEAR_USER')
-
-      router.push('/login')
+    async logout() {
+      try {
+        await signOut(this.auth);
+        // Clear user state in the store (if you are using a store)
+        this.clearUser();
+        // Redirect or perform any other actions after logout
+        this.router.push('/login');
+      } catch (error) {
+        console.error('Logout error:', error.message);
+      }
     },
-
-    fetchUser ({ commit }) {
-      auth.onAuthStateChanged(async user => {
+    
+    fetchUser() {
+      this.auth.onAuthStateChanged(async user => {
         if (user === null) {
-          commit('CLEAR_USER')
+          this.user = null;
         } else {
-          commit('SET_USER', user)
-
-          if (router.isReady() && router.currentRoute.value.path === '/home') {
-            router.push('/')
+          this.user = user;
+          if (this.router.isReady() && this.router.currentRoute.value.path === '/home') {
+            this.router.push('/');
           }
         }
-      })
+      });
     }
-    
-  }
-})
+  },
+});

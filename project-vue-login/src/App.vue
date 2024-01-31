@@ -4,7 +4,7 @@ import {  RouterView } from 'vue-router'
 </script>
 
 <template> 
-    <h1>Welcome</h1>
+    <h1>Hello! This is welcome page</h1>
     <div>   
 
       <nav>

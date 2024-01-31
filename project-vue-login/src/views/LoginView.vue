@@ -1,4 +1,3 @@
-import { RouterLink, RouterView } from 'vue-router'
 
 <template>
     <div>
@@ -20,6 +19,7 @@ import { RouterLink, RouterView } from 'vue-router'
   <script>
   import { auth } from '../firebase';
   import { signInWithEmailAndPassword } from 'firebase/auth';
+  import { RouterLink, RouterView } from 'vue-router'
   
   export default {
     data() {

@@ -15,6 +15,7 @@
       <input type="password" v-model="confirmPassword" required />
     </div> -->
       <button type="submit">Register</button>
+      <p>Already a user? <RouterLink to="/login">Login</RouterLink></p>
     </form> 
   </div>
 </template>
