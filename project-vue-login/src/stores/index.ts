@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { auth } from '../firebase';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -25,6 +26,8 @@ export const useUserStore = defineStore('user', {
 
       try {
         await createUserWithEmailAndPassword(this.auth, email, password);
+        this.user= auth.currentUser;
+        
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
