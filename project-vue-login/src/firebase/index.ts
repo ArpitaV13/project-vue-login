@@ -1,7 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyD8oKPW1ocYqD79PvQQnBDPmjDrz8XmelQ",
     authDomain: "vue-project-5d4a0.firebaseapp.com",
