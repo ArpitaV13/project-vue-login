@@ -20,7 +20,7 @@
 
 <script>
 import { auth } from '../firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useUserStore } from '@/stores/index';
 import { RouterLink } from 'vue-router';
 
 export default {
@@ -31,9 +31,10 @@ export default {
     };
   },
   methods: {
-    async login() {
+    login() {
       try {
-        await signInWithEmailAndPassword(auth, this.email, this.password);
+        const store= useUserStore();
+        store.login({email:this.email,password:this.password})
         this.$router.push('/home');
       } catch (error) {
         console.error('Login error:', error.message);

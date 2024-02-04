@@ -1,17 +1,19 @@
 import { defineStore } from 'pinia';
 import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: null
+    user: null,
+    userName:''
   }),
   actions: {
     async login(details) {
       const { email, password } = details;
       try {
-        await signInWithEmailAndPassword(this.auth, email, password);
-        this.user = this.auth.currentUser;
-        this.router.push('/');
+        const userData= await signInWithEmailAndPassword(auth, email, password);
+        userName=userData.user.email;
+        this.user = auth.currentUser;
       } catch (error) {
         console.log("Could not sign in:", error.message);
       }
@@ -22,11 +24,13 @@ export const useUserStore = defineStore('user', {
     },
 
     async register(details) {
-      const { email, password } = details;
-
+      const { name, email, password} = details;
+      console.log(details,"Details");
       try {
-        await createUserWithEmailAndPassword(this.auth, email, password);
-        this.user= auth.currentUser;
+        const userData= await createUserWithEmailAndPassword(auth, email, password);
+        console.log(userData,"USERDATA");
+        userName=userData.user.email;
+       // this.user= auth.currentUser;
         
       } catch (error) {
         switch (error.code) {
@@ -44,16 +48,14 @@ export const useUserStore = defineStore('user', {
             break;
           default:
             alert("Something went wrong");
-        }
-      }
+        }  
+    }
     },
 
     async logout() {
       try {
         await signOut(this.auth);
-        // Clear user state in the store (if you are using a store)
         this.clearUser();
-        // Redirect or perform any other actions after logout
         this.router.push('/login');
       } catch (error) {
         console.error('Logout error:', error.message);

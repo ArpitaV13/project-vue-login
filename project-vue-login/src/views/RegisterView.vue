@@ -12,7 +12,7 @@
           <input type="password" v-model="password" required class="mt-1 p-2 w-full border rounded-md" />
         </div>
         <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700 transition">Register</button>
-        <h3 class="mt-2 text-sm text-gray-600 text-center">Already a user? <RouterLink to="/login" class="text-blue-500">Login</RouterLink></h3>
+        <h3 class="mt-2 text-sm text-gray-600 text-center">Already a user? <RouterLink to="/" class="text-blue-500">Login</RouterLink></h3>
       </form>
     </div>
   </div>
@@ -21,20 +21,29 @@
 
 <script>
  import { auth } from '../firebase';
-  import { createUserWithEmailAndPassword } from 'firebase/auth';
+ import { useUserStore } from '@/stores/index';
+ import { RouterLink } from 'vue-router';
+
 export default {
   data() {
     return {
+      name:'',
       email: '',
-      password: '',
+      password: ''
     };
   },
   methods: {
-    register() {
-      createUserWithEmailAndPassword(auth,this.email,this.password)
+  
+      register() {
+      const store= useUserStore();
+      //createUserWithEmailAndPassword(auth,this.email,this.name,this.password)
+      store.register({name:this.name,email:this.email,password:this.password})
       console.log('Register clicked');
       this.$router.push('/home');
     },
+      
+
+  
   },
 };
 </script>
