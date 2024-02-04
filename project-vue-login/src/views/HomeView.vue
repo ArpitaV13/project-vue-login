@@ -1,13 +1,10 @@
-import { auth } from '../firebase';
-import { signOut } from 'firebase/auth';
-import {defineStore} from 'pinia';
-
 <template>
-  <div>
-    <h2>Home Page</h2>
-   <p>This is the home page</p>
-   <button @click="logout">Logout</button>
-
+  <div class="container mx-auto my-8 text-center">
+    <h2 class="text-3xl font-bold mb-4">Home Page</h2>
+    <p class="text-gray-600">This is the home page</p>
+    <button @click="logout" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Logout
+    </button>
   </div>
 </template>
 
@@ -20,10 +17,8 @@ export default {
     logout() {
       try {
         signOut(auth);
-        // If you are using Pinia store, clear the user state
         const store = useUserStore();
-        store.clearUser(); // Replace with the actual method in your store
-        // Redirect or perform any other actions after logout
+        store.clearUser(); 
         this.$router.push('/login');
       } catch (error) {
         console.error('Logout error:', error.message);
@@ -31,9 +26,8 @@ export default {
     },
   },
 };
-//import {useUserStore} from '@/stores/index'
 </script>
 
 <style scoped>
-/* Add your styles here */
+
 </style>

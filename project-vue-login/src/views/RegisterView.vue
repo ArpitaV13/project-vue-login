@@ -1,24 +1,23 @@
 <template>
-  <div>
-    <h2>Register</h2>
-     <form @submit.prevent="register">
-      <div>
-      <label for="email">Email:</label>
-      <input type="email" v-model="email" required />
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" v-model="password" required />
-    </div>
-    <!-- <div>
-      <label for="confirmPassword">Confirm Password:</label>
-      <input type="password" v-model="confirmPassword" required />
-    </div> -->
-      <button type="submit">Register</button>
-      <p>Already a user? <RouterLink to="/login">Login</RouterLink></p>
-    </form> 
+  <div class="container mx-auto my-8">
+    <h2 class="text-3xl font-bold mb-4 text-center">Register</h2>
+    <form @submit.prevent="register" class="max-w-md mx-auto">
+      <div class="mb-4">
+        <label for="email" class="block text-gray-600">Email:</label>
+        <input type="email" v-model="email" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500">
+      </div>
+      <div class="mb-4">
+        <label for="password" class="block text-gray-600">Password:</label>
+        <input type="password" v-model="password" required class="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:border-blue-500">
+      </div>
+      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Register
+      </button>
+      <p class="mt-4">Already a user? <RouterLink to="/login" class="text-blue-500">Login</RouterLink></p>
+    </form>
   </div>
 </template>
+
 
 <script>
  import { auth } from '../firebase';

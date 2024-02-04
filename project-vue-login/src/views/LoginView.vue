@@ -1,43 +1,48 @@
-
 <template>
-    <div>
-      <h2></h2>
-      <form @submit.prevent="login">
-        <label for="email">Email:</label>
-        <input type="email" v-model="email" required />
-  
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" required />
-  
-        <button type="submit">Login</button>
-        <h3>Not a user, Register </h3>
-        <RouterLink to="/register">Register</RouterLink>
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
+    <div class="w-full max-w-md bg-white p-8 rounded-md shadow-md">
+      <h2 class="text-3xl mb-4 font-bold text-center text-blue-500">Login</h2>
+      <form @submit.prevent="login" class="space-y-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-600">Email:</label>
+          <input type="email" v-model="email" required class="mt-1 p-2 w-full border rounded-md" />
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-600">Password:</label>
+          <input type="password" v-model="password" required class="mt-1 p-2 w-full border rounded-md" />
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">Login</button>
+        <h3 class="mt-2 text-sm text-gray-600 text-center">Not a user? <RouterLink to="/register" class="text-blue-500">Register</RouterLink></h3>
       </form>
     </div>
-  </template>
-  
-  <script>
-  import { auth } from '../firebase';
-  import { signInWithEmailAndPassword } from 'firebase/auth';
-  import { RouterLink, RouterView } from 'vue-router'
-  
-  export default {
-    data() {
-      return {
-        email: '',
-        password: '',
-      };
+  </div>
+</template>
+
+<script>
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { RouterLink } from 'vue-router';
+
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    async login() {
+      try {
+        await signInWithEmailAndPassword(auth, this.email, this.password);
+        this.$router.push('/home');
+      } catch (error) {
+        console.error('Login error:', error.message);
+      }
     },
-    methods: {
-      login() {
-         signInWithEmailAndPassword(auth, this.email, this.password);
-         this.$router.push('/home');
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  /* Add your styles here */
-  </style>
-  
+  },
+};
+</script>
+
+<style scoped>
+/* No need for separate styles here if using Tailwind CSS classes */
+</style>
