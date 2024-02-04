@@ -1,4 +1,4 @@
-# Vue Tailwind Firebase Auth App
+# Project Vue Login
 
 This is a simple login/register application built with Vue.js, Tailwind CSS, and Firebase for authentication.
 
