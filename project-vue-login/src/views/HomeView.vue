@@ -19,7 +19,7 @@ export default {
         signOut(auth);
         const store = useUserStore();
         store.clearUser(); 
-        this.$router.push('/login');
+        this.$router.push('/');
       } catch (error) {
         console.error('Logout error:', error.message);
       }
