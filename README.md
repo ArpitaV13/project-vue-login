@@ -15,7 +15,7 @@ Make sure you have Node.js and npm installed on your machine.
 1. Clone the repository:
 
    ```bash
-   git clone
+   git clone https://github.com/ArpitaV13/project-vue-login
 
 2. Navigate to the project directory
 
@@ -26,3 +26,13 @@ Make sure you have Node.js and npm installed on your machine.
 
    ```bash
    npm install
+
+4. Run storybook
+
+   ```bas
+   npm run storybook
+
+### Run the project
+
+   ```bash
+   npm run dev
