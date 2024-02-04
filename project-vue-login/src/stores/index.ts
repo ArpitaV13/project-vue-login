@@ -1,19 +1,24 @@
 import { defineStore } from 'pinia';
 import { auth } from '../firebase';
+import { useRouter } from 'vue-router';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    user: null,
-    userName:''
+    user: auth.currentUser,
   }),
   actions: {
     async login(details) {
       const { email, password } = details;
       try {
         const userData= await signInWithEmailAndPassword(auth, email, password);
-        userName=userData.user.email;
-        this.user = auth.currentUser;
+        console.log(userData,"USERDATA");
+        this.user = userData.user;
+        const router = useRouter();
+        if(userData){
+          router.push('/home')
+        }
+        return this.user;
       } catch (error) {
         console.log("Could not sign in:", error.message);
       }
@@ -28,9 +33,8 @@ export const useUserStore = defineStore('user', {
       console.log(details,"Details");
       try {
         const userData= await createUserWithEmailAndPassword(auth, email, password);
-        console.log(userData,"USERDATA");
-        userName=userData.user.email;
-       // this.user= auth.currentUser;
+        
+        this.user= userData.user;
         
       } catch (error) {
         switch (error.code) {

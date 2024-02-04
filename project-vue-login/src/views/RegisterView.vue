@@ -20,30 +20,22 @@
 
 
 <script>
- import { auth } from '../firebase';
+ 
  import { useUserStore } from '@/stores/index';
  import { RouterLink } from 'vue-router';
+ import {mapStores} from 'pinia'
 
 export default {
-  data() {
-    return {
-      name:'',
-      email: '',
-      password: ''
-    };
+  computed:{
+    ...mapStores(useUserStore)
   },
   methods: {
   
-      register() {
-      const store= useUserStore();
-      //createUserWithEmailAndPassword(auth,this.email,this.name,this.password)
-      store.register({name:this.name,email:this.email,password:this.password})
+     async register() {
+      await this.userStore.register({name:this.name,email:this.email,password:this.password});
       console.log('Register clicked');
       this.$router.push('/home');
-    },
-      
-
-  
+    }, 
   },
 };
 </script>

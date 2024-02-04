@@ -1,3 +1,26 @@
+<script>
+import { useUserStore } from '@/stores/index';
+import { RouterLink } from 'vue-router';
+import {mapStores} from 'pinia'
+
+
+export default {
+  computed:{
+    ...mapStores(useUserStore)
+  },
+  methods: {
+   async login() {
+      try {
+        await this.userStore.login({email:this.email,password:this.password})
+        this.$router.push('/home');
+      } catch (error) {
+        console.error('Login error:', error.message);
+      }
+    },
+  },
+ };
+</script>
+
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="w-full max-w-md bg-white p-8 rounded-md shadow-md">
@@ -18,31 +41,6 @@
   </div>
 </template>
 
-<script>
-import { auth } from '../firebase';
-import { useUserStore } from '@/stores/index';
-import { RouterLink } from 'vue-router';
-
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-    };
-  },
-  methods: {
-    login() {
-      try {
-        const store= useUserStore();
-        store.login({email:this.email,password:this.password})
-        this.$router.push('/home');
-      } catch (error) {
-        console.error('Login error:', error.message);
-      }
-    },
-  },
-};
-</script>
 
 <style scoped>
 /* No need for separate styles here if using Tailwind CSS classes */
