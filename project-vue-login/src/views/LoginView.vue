@@ -1,24 +1,31 @@
 <script>
+import { ref } from 'vue';
 import { useUserStore } from '@/stores/index';
-import { RouterLink } from 'vue-router';
-import {mapStores} from 'pinia'
-
+import { useRouter } from 'vue-router';
 
 export default {
-  computed:{
-    ...mapStores(useUserStore)
-  },
-  methods: {
-   async login() {
+  setup() {
+    const email = ref('');
+    const password = ref('');
+    const userStore = useUserStore();
+    const router = useRouter();
+
+    const login = async () => {
       try {
-        await this.userStore.login({email:this.email,password:this.password})
-        this.$router.push('/home');
+        await userStore.login({ email: email.value, password: password.value });
+        router.push('/home');
       } catch (error) {
         console.error('Login error:', error.message);
       }
-    },
-  },
- };
+    };
+
+    return {
+      email,
+      password,
+      login
+    };
+  }
+};
 </script>
 
 <template>
@@ -35,12 +42,11 @@ export default {
           <input type="password" v-model="password" required class="mt-1 p-2 w-full border rounded-md" />
         </div>
         <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition">Login</button>
-        <h3 class="mt-2 text-sm text-gray-600 text-center">Not a user? <RouterLink to="/register" class="text-blue-500">Register</RouterLink></h3>
+        <h3 class="mt-2 text-sm text-gray-600 text-center">Not a user? <router-link to="/register" class="text-blue-500">Register</router-link></h3>
       </form>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 /* No need for separate styles here if using Tailwind CSS classes */
