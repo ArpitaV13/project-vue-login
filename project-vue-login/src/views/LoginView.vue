@@ -15,7 +15,7 @@ export default {
         await userStore.login({ email: email.value, password: password.value });
         router.push('/home');
       } catch (error) {
-        console.error('Login error:', error.message);
+        console.log('Login error:', error.message);
       }
     };
 

@@ -1,5 +1,4 @@
 <script>
-import { mapStores } from 'pinia';
 import { useUserStore } from '@/stores/index';
 import { useRouter } from 'vue-router';
 
@@ -13,9 +12,14 @@ export default {
         await userStore.logout();
         router.push('/');
       } catch (error) {
-        console.error('Logout error:', error.message);
+        console.log('Logout error:', error.message);
       }
     };
+
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      userStore.user = JSON.parse(userData);
+    }
 
     return {
       userStore,
@@ -28,7 +32,7 @@ export default {
 <template>
   <div class="container mx-auto my-8 text-center">
     <h2 class="text-3xl font-bold mb-4">Dashboard</h2>
-    <p class="text-gray-600">Welcome {{ userStore.user.email }}</p>
+    <p v-if="userStore.user" class="text-gray-600">Welcome {{ userStore.user.email }}</p>
     <button @click="logout" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
       Logout
     </button>

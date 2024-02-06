@@ -11,14 +11,11 @@ export const useUserStore = defineStore('user', {
     async login(details) {
       const { email, password } = details;
       try {
-        const userData= await signInWithEmailAndPassword(auth, email, password);
-        console.log(userData,"USERDATA");
+        const userData = await signInWithEmailAndPassword(auth, email, password);
         this.user = userData.user;
+        localStorage.setItem('user', JSON.stringify(this.user)); 
         const router = useRouter();
-        if(userData){
-          router.push('/home')
-        }
-        return this.user;
+        router.push('/home');
       } catch (error) {
         console.log("Could not sign in:", error.message);
       }
@@ -26,16 +23,15 @@ export const useUserStore = defineStore('user', {
 
     clearUser() {
       this.user = null;
+      localStorage.removeItem('user'); 
     },
 
     async register(details) {
-      const { name, email, password} = details;
-      console.log(details,"Details");
+      const { email, password} = details;
       try {
-        const userData= await createUserWithEmailAndPassword(auth, email, password);
-        
-        this.user= userData.user;
-        
+        const userData = await createUserWithEmailAndPassword(auth, email, password);
+        this.user = userData.user;
+        localStorage.setItem('user', JSON.stringify(this.user)); 
       } catch (error) {
         switch (error.code) {
           case 'auth/email-already-in-use':
@@ -52,31 +48,39 @@ export const useUserStore = defineStore('user', {
             break;
           default:
             alert("Something went wrong");
-        }  
-    }
+        }
+      }
     },
 
     async logout() {
       try {
-        await signOut(this.auth);
+        await signOut(auth);
         this.clearUser();
-        this.router.push('/login');
+        const router = useRouter();
+        router.push('/login');
       } catch (error) {
-        console.error('Logout error:', error.message);
+        console.log('Logout error:', error.message);
       }
     },
-    
+
     fetchUser() {
-      this.auth.onAuthStateChanged(async user => {
+      // Check if user data exists in localStorage and set it to the store
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        this.user = JSON.parse(userData);
+      }
+
+      auth.onAuthStateChanged(user => {
         if (user === null) {
-          this.user = null;
+          this.clearUser();
         } else {
           this.user = user;
-          if (this.router.isReady() && this.router.currentRoute.value.path === '/home') {
-            this.router.push('/');
+          const router = useRouter();
+          if (router.isReady() && router.currentRoute.value.path === '/home') {
+            router.push('/');
           }
         }
       });
     }
-  },
+  }
 });
