@@ -64,7 +64,6 @@ export const useUserStore = defineStore('user', {
     },
 
     fetchUser() {
-      // Check if user data exists in localStorage and set it to the store
       const userData = localStorage.getItem('user');
       if (userData) {
         this.user = JSON.parse(userData);

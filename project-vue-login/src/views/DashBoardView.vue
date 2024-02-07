@@ -10,16 +10,12 @@ export default {
     const logout = async () => {
       try {
         await userStore.logout();
-        router.push('/');
+        router.push('/');      
       } catch (error) {
         console.log('Logout error:', error.message);
       }
     };
-
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      userStore.user = JSON.parse(userData);
-    }
+    userStore.fetchUser();
 
     return {
       userStore,
